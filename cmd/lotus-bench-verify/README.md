@@ -34,5 +34,5 @@ Run all benchmarks:
 go test -bench=.
 
 Run WindowPoST benchmark (10 full sized window proofs):
-go test -bench=VerifyWindow -benchtime 20x
+go test -bench=. -benchtime 20x
 

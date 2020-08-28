@@ -91,9 +91,6 @@ func BenchmarkVerifyWindow(b *testing.B) {
 
 func TestMain(m *testing.M) {
 	// Warmup
-	// This is particularly important for window since the first verification
-	// takes a long time and we want to see the hot verification time
-
 	buf, err := ioutil.ReadFile("tests/window.prf")
 	if err != nil {
 		panic(err)
@@ -110,6 +107,25 @@ func TestMain(m *testing.M) {
 		fmt.Println("verify failed")
 		os.Exit(1)
 	}
+
+	buf, err = ioutil.ReadFile("tests/seal.prf")
+	if err != nil {
+		panic(err)
+	}
+
+	var info2 abi.SealVerifyInfo
+	err = info2.UnmarshalCBOR(bytes.NewReader(buf))
+	if err != nil {
+		panic(err)
+	}
+
+	ok, err = ffiwrapper.ProofVerifier.VerifySeal(info2)
+	if err != nil || !ok {
+		fmt.Println("verify failed")
+		os.Exit(1)
+	}
+
+	fmt.Println("Warmup done")
 
 	// call flag.Parse() here if TestMain uses flags
 	os.Exit(m.Run())

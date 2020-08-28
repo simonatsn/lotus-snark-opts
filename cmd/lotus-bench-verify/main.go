@@ -125,15 +125,42 @@ func verifyAll(proofType string, verify func(string) bool) bool {
 
 func main() {
 	ok := true
-	if !verifyAll("seal", verifySeal) {
+	if !verifyWindow("tests/window.prf") {
 		ok = false
 	}
-	if !verifyAll("window", verifyWindow) {
+	start := time.Now()
+	if !verifyWindow("tests/window.prf") {
 		ok = false
 	}
-	if !verifyAll("winning", verifyWinning) {
+	timeTrack(start, "Verify window")
+
+	if !verifySeal("tests/seal.prf") {
 		ok = false
 	}
+	start = time.Now()
+	if !verifySeal("tests/seal.prf") {
+		ok = false
+	}
+	timeTrack(start, "Verify seal")
+
+	if !verifyWinning("tests/winning.prf") {
+		ok = false
+	}
+	start = time.Now()
+	if !verifyWinning("tests/winning.prf") {
+		ok = false
+	}
+	timeTrack(start, "Verify winning")
+
+	// if !verifyAll("seal", verifySeal) {
+	// 	ok = false
+	// }
+	// if !verifyAll("window", verifyWindow) {
+	// 	ok = false
+	// }
+	// if !verifyAll("winning", verifyWinning) {
+	// 	ok = false
+	// }
 	if !ok {
 		fmt.Println("Errors encountered")
 	} else {
